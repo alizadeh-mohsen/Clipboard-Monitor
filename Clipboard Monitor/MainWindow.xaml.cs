@@ -7,7 +7,8 @@ namespace Clipboard_Monitor;
 public partial class MainWindow : Window
 {
     private DispatcherTimer _clipboardMonitorTime;
-
+    private const string ClipBoardBusy = "Clipboard is busy, please try again.";
+     
     public MainWindow()
     {
         InitializeComponent();
@@ -36,27 +37,54 @@ public partial class MainWindow : Window
                 }
             }
         }
-        catch (Exception)
+        catch (System.Runtime.InteropServices.COMException)
         {
-
-            throw;
+            statusTextBlock.Text = ClipBoardBusy;
+        }
+        catch (Exception ex)
+        {
+            statusTextBlock.Text = ex.Message;
         }
     }
 
     private void listBox_MouseRightButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-        if (listBox.SelectedItem != null)
+        try
         {
-            listBox.Items.Remove(listBox.SelectedItem);
-            Clipboard.Clear();
+            if (listBox.SelectedItem != null)
+            {
+                if (Clipboard.GetText().Equals(listBox.SelectedItem.ToString()))
+                    Clipboard.Clear();
+                listBox.Items.Remove(listBox.SelectedItem);
+
+            }
         }
+        catch (System.Runtime.InteropServices.COMException)
+        {
+            statusTextBlock.Text = ClipBoardBusy;
+        }
+        catch (Exception ex)
+        {
+            statusTextBlock.Text = ex.Message;
+        }
+
     }
 
     private void listBox_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-        if (listBox.SelectedItem != null)
+        try
         {
-            Clipboard.SetText(listBox.SelectedItem.ToString());
+            if (listBox.SelectedItem != null)
+                Clipboard.SetText(listBox.SelectedItem.ToString());
+        }
+        catch (System.Runtime.InteropServices.COMException)
+        {
+            statusTextBlock.Text = ClipBoardBusy;
+        }
+        catch (Exception ex)
+        {
+
+            statusTextBlock.Text = ex.Message;
         }
     }
 }

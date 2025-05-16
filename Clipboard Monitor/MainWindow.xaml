@@ -5,8 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Clipboard_Monitor"
         mc:Ignorable="d"
-        Title="Clipboard Monitor" Height="762" Width="542" Icon="/checklist.png">
-    <ListBox x:Name="listBox" d:ItemsSource="{d:SampleData ItemCount=5}" 
-             MouseRightButtonUp="listBox_MouseRightButtonUp" 
-             MouseLeftButtonUp="listBox_MouseLeftButtonUp"/>
+        Title="Clipboard Monitor V.1" Height="762" Width="542" Icon="/checklist.png">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ListBox x:Name="listBox"
+                 d:ItemsSource="{d:SampleData ItemCount=5}"
+                 MouseRightButtonUp="listBox_MouseRightButtonUp"
+                 MouseLeftButtonUp="listBox_MouseLeftButtonUp"
+                 Grid.Row="0"/>
+        <StatusBar Grid.Row="1">
+            <StatusBarItem>
+                <TextBlock x:Name="statusTextBlock" Text="" Foreground="Red" />
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
 </Window>
