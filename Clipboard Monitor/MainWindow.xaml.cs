@@ -2,13 +2,11 @@
 using System.Windows.Threading;
 namespace Clipboard_Monitor;
 
-
-
 public partial class MainWindow : Window
 {
     private DispatcherTimer _clipboardMonitorTime;
     private const string ClipBoardBusy = "Clipboard is busy, please try again.";
-     
+
     public MainWindow()
     {
         InitializeComponent();
@@ -33,17 +31,18 @@ public partial class MainWindow : Window
                     && !string.IsNullOrWhiteSpace(currentText))
                 {
                     listBox.Items.Add(currentText);
+                    itemCount.Text = listBox.Items.Count.ToString();
                     Activate();
                 }
             }
         }
         catch (System.Runtime.InteropServices.COMException)
         {
-            statusTextBlock.Text = ClipBoardBusy;
+            itemCount.Text = ClipBoardBusy;
         }
         catch (Exception ex)
         {
-            statusTextBlock.Text = ex.Message;
+            itemCount.Text = ex.Message;
         }
     }
 
@@ -56,16 +55,16 @@ public partial class MainWindow : Window
                 if (Clipboard.GetText().Equals(listBox.SelectedItem.ToString()))
                     Clipboard.Clear();
                 listBox.Items.Remove(listBox.SelectedItem);
-
+                itemCount.Text = listBox.Items.Count.ToString();
             }
         }
         catch (System.Runtime.InteropServices.COMException)
         {
-            statusTextBlock.Text = ClipBoardBusy;
+            itemCount.Text = ClipBoardBusy;
         }
         catch (Exception ex)
         {
-            statusTextBlock.Text = ex.Message;
+            itemCount.Text = ex.Message;
         }
 
     }
@@ -79,12 +78,18 @@ public partial class MainWindow : Window
         }
         catch (System.Runtime.InteropServices.COMException)
         {
-            statusTextBlock.Text = ClipBoardBusy;
+            itemCount.Text = ClipBoardBusy;
         }
         catch (Exception ex)
         {
-
-            statusTextBlock.Text = ex.Message;
+            itemCount.Text = ex.Message;
         }
+    }
+
+    private void ClearListMenuItem_Click(object sender, RoutedEventArgs e)
+    {
+        listBox.Items.Clear();
+        itemCount.Text = "0";
+        Clipboard.Clear();
     }
 }
